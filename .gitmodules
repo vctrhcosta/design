@@ -25,3 +25,9 @@
 [submodule "ergonomia"]
 	path = ergonomia
 	url = https://github.com/vctrhcosta/ergonomia-ifb.git
+[submodule "design-thinking"]
+	path = design-thinking
+	url = https://github.com/vctrhcosta/design-thinking.git
+[submodule "cadep"]
+	path = cadep
+	url = https://github.com/vctrhcosta/cadep.git
