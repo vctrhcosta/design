@@ -31,3 +31,6 @@
 [submodule "cadep"]
 	path = cadep
 	url = https://github.com/vctrhcosta/cadep.git
+[submodule "libras"]
+	path = libras
+	url = https://github.com/vctrhcosta/libras-ifb.git
