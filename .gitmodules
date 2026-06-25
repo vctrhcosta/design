@@ -16,9 +16,6 @@
 [submodule "metodologia-pratica-projeto"]
 	path = metodologia-pratica-projeto
 	url = https://github.com/vctrhcosta/metodologia-pratica-projeto-ifb.git
-[submodule "metodologia-projeto"]
-	path = metodologia-projeto
-	url = https://github.com/vctrhcosta/metodologia-projeto-ifb.git
 [submodule "tecnologia-propriedade-materiais"]
 	path = tecnologia-propriedade-materiais
 	url = https://github.com/vctrhcosta/tecnologia-propriedade-materiais-ifb.git
@@ -28,9 +25,3 @@
 [submodule "design-thinking"]
 	path = design-thinking
 	url = https://github.com/vctrhcosta/design-thinking.git
-[submodule "cadep"]
-	path = cadep
-	url = https://github.com/vctrhcosta/cadep.git
-[submodule "libras"]
-	path = libras
-	url = https://github.com/vctrhcosta/libras-ifb.git
