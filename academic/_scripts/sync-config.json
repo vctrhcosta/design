@@ -1,30 +1,30 @@
 {
   "notion_token_env": "NOTION_TOKEN",
-  "notion_token_fallback": ".mcp.json",
+  "notion_token_fallback": "../../.mcp.json",
   "mappings": [
     {
       "notion_page_id": "31ef1bb8-2188-8051-96bd-cd1759a9bdcc",
-      "repo_path": "ergonomia",
+      "repo_path": "academic/ergonomia",
       "name": "Ergonomia"
     },
     {
       "notion_page_id": "318f1bb8-2188-8070-87bc-ebbbbea03f3e",
-      "repo_path": "tecnologia-propriedade-materiais",
+      "repo_path": "academic/tecnologia-propriedade-materiais",
       "name": "Tecnologia e Propriedade dos Materiais"
     },
     {
       "notion_page_id": "319f1bb8-2188-80c9-90cd-fb4f872fce05",
-      "repo_path": "metodologia-pratica-projeto",
+      "repo_path": "academic/metodologia-pratica-projeto",
       "name": "Metodologia e Prática de Projeto"
     },
     {
       "notion_page_id": "31ef1bb8-2188-800f-b328-fce346f10388",
-      "repo_path": "materiais-processos-fabricacao-1",
+      "repo_path": "academic/materiais-processos-fabricacao-1",
       "name": "Materiais e Processos de Fabricação 1"
     },
     {
       "notion_page_id": "31bf1bb8-2188-801a-a6c4-d1f535705d3a",
-      "repo_path": "marca-curso",
+      "repo_path": "academic/marca-curso",
       "name": "Narrativa de Construção da Marca"
     }
   ],
