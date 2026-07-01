@@ -8,6 +8,7 @@ Repositório acadêmico com materiais, projetos e trabalhos do curso de Design d
 - `/academico` — Humanização de textos acadêmicos
 - `/normalizador` — Normalização ABNT/IFB
 - `/abntex` — Exportação para LaTeX ABNT
+- `/ghostwriter` — Pesquisa com evidências + redação acadêmica (regra zero: sem evidência = sem citação)
 
 ## letmesee — Módulo Visual
 
