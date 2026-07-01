@@ -25,3 +25,9 @@
 [submodule "design-thinking"]
 	path = design-thinking
 	url = https://github.com/vctrhcosta/design-thinking.git
+[submodule "crema"]
+	path = crema
+	url = https://github.com/vctrhcosta/crema.git
+[submodule "roster"]
+	path = roster
+	url = https://github.com/vctrhcosta/roster.git
