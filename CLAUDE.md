@@ -1,6 +1,14 @@
-# IFB — Curso Superior de Tecnologia em Design de Produto
+# design — Workspace de Design
 
-Repositório acadêmico com materiais, projetos e trabalhos do curso de Design de Produto no IFB.
+Workspace unificado: projetos profissionais na raiz, disciplinas acadêmicas em `academic/`.
+
+## Estrutura
+
+```
+├── academic/          # Disciplinas IFB + suporte (_institucional, _scripts)
+├── crema/             # Gelatos para casamentos
+├── roster/            # Video Zero e outros projetos
+```
 
 ## Skills disponíveis
 

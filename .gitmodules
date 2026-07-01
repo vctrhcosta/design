@@ -1,29 +1,29 @@
 [submodule "_institucional"]
-	path = _institucional
+	path = academic/_institucional
 	url = https://github.com/vctrhcosta/institucional-ifb.git
 [submodule "curriculum-flowchart"]
-	path = curriculum-flowchart
+	path = academic/_curriculum-flowchart
 	url = https://github.com/vctrhcosta/curriculum-flowchart-ifb.git
 [submodule "etica-cidadania"]
-	path = etica-cidadania
+	path = academic/etica-cidadania
 	url = https://github.com/vctrhcosta/etica-cidadania-ifb.git
 [submodule "marca-curso"]
-	path = marca-curso
+	path = academic/marca-curso
 	url = https://github.com/vctrhcosta/marca-curso-ifb.git
 [submodule "materiais-processos-fabricacao-1"]
-	path = materiais-processos-fabricacao-1
+	path = academic/materiais-processos-fabricacao-1
 	url = https://github.com/vctrhcosta/materiais-processos-fabricacao-1-ifb.git
 [submodule "metodologia-pratica-projeto"]
-	path = metodologia-pratica-projeto
+	path = academic/metodologia-pratica-projeto
 	url = https://github.com/vctrhcosta/metodologia-pratica-projeto-ifb.git
 [submodule "tecnologia-propriedade-materiais"]
-	path = tecnologia-propriedade-materiais
+	path = academic/tecnologia-propriedade-materiais
 	url = https://github.com/vctrhcosta/tecnologia-propriedade-materiais-ifb.git
 [submodule "ergonomia"]
-	path = ergonomia
+	path = academic/ergonomia
 	url = https://github.com/vctrhcosta/ergonomia-ifb.git
 [submodule "design-thinking"]
-	path = design-thinking
+	path = academic/design-thinking
 	url = https://github.com/vctrhcosta/design-thinking.git
 [submodule "crema"]
 	path = crema
