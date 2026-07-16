@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roster — One-Shot Index</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f4f2;
+    --ink: #1a1a1a;
+    --mute: #888;
+    --faint: #bbb;
+    --rule: #ddd;
+    --red: #e03030;
+    --f: "SF Mono", "Fira Mono", "Consolas", monospace;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--f);
+    font-size: 13px;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ── header ── */
+  .page-header {
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--mute);
+    margin-bottom: 32px;
+  }
+
+  /* ── list ── */
+  .index-list {
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  .index-item {
+    display: grid;
+    grid-template-columns: 20px 28px 1fr auto;
+    align-items: center;
+    gap: 0 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--rule);
+    cursor: pointer;
+    transition: background .1s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .index-item:hover { background: rgba(0,0,0,.025); }
+  .index-item:hover .item-name { text-decoration: underline; }
+
+  /* star dot */
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--faint);
+    justify-self: center;
+    flex-shrink: 0;
+  }
+  .dot.starred {
+    background: var(--red);
+    border-color: var(--red);
+  }
+
+  /* number */
+  .num {
+    font-size: 11px;
+    color: var(--faint);
+    letter-spacing: .04em;
+    justify-self: start;
+  }
+
+  /* name + desc */
+  .item-body {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
+  .item-name {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+  }
+  .item-desc {
+    font-size: 11px;
+    color: var(--mute);
+    letter-spacing: .02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* arrow */
+  .item-arrow {
+    font-size: 11px;
+    color: var(--faint);
+    padding-left: 16px;
+    flex-shrink: 0;
+  }
+  .index-item:hover .item-arrow { color: var(--ink); }
+
+  /* ── footer ── */
+  .page-footer {
+    margin-top: 24px;
+    font-size: 11px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--mute);
+  }
+
+  /* ── empty state ── */
+  .item-name.pending { color: var(--faint); font-weight: 400; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-header">Roster — One-Shot Index</div>
+
+  <ul class="index-list" id="list"></ul>
+
+  <div class="page-footer" id="footer"></div>
+
+</div>
+
+<script>
+const entries = [
+  {
+    id: "R01",
+    name: "R01 — Swiss Utility",
+    desc: "Off-white quente, ouro como acento único, grotesco display, grid suíço, zero decoração",
+    file: "R01-swiss-utility.html",
+    starred: true,
+  },
+  // ── add new one-shots below this line ──
+  {
+    id: "R02",
+    name: "R02 — Editorial Warm",
+    desc: "Switzer 800, hero tipo display XL, animações portadas vanilla JS, paleta creme/ouro, sem decoração genérica",
+    file: "R02-editorial-warm.html",
+    starred: false,
+  },
+  {
+    id: "R03",
+    name: "R03 — Ambient Light",
+    desc: "Gradient orbs, type 200-weight, ghost watermark, pill CTAs, dark section, fundo ativo como atmosfera",
+    file: "R03-ambient-light.html",
+    starred: false,
+  },
+  {
+    id: "R04",
+    name: "R04 — Spread",
+    desc: "Nenhuma seção compartilha o mesmo grid. Dark/light full-bleed split, 50/50 product, colossal 10%, tabela horizontal, pricing com número gigante",
+    file: "R04-spread.html",
+    starred: false,
+  },
+];
+
+const list = document.getElementById("list");
+const footer = document.getElementById("footer");
+
+entries.forEach((e, i) => {
+  const li = document.createElement("li");
+  const num = String(i).padStart(2, "0");
+
+  if (e.file) {
+    li.innerHTML = `
+      <a class="index-item" href="${e.file}" target="_blank">
+        <span class="dot ${e.starred ? "starred" : ""}"></span>
+        <span class="num">${num}</span>
+        <span class="item-body">
+          <span class="item-name">${e.name}</span>
+          <span class="item-desc">${e.desc}</span>
+        </span>
+        <span class="item-arrow">→</span>
+      </a>`;
+  } else {
+    li.innerHTML = `
+      <div class="index-item" style="cursor:default; opacity:.5">
+        <span class="dot"></span>
+        <span class="num">${num}</span>
+        <span class="item-body">
+          <span class="item-name pending">${e.name}</span>
+          <span class="item-desc">${e.desc}</span>
+        </span>
+        <span class="item-arrow"></span>
+      </div>`;
+  }
+  list.appendChild(li);
+});
+
+const total = entries.length;
+const starred = entries.filter(e => e.starred).length;
+footer.textContent = `${total} direction${total !== 1 ? "s" : ""} — ${starred} starred`;
+</script>
+</body>
+</html>

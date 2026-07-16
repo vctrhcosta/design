@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roster — R01 Swiss Utility</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ═══ TOKENS ═══ */
+  :root {
+    --paper:   #f7f3ee;
+    --surface: #fffdf9;
+    --ink:     #1a1a1a;
+    --mute:    #6b6860;
+    --faint:   #9e9b96;
+    --rail:    #e2ddd8;
+    --gold:    #b5871e;
+    --gold-bg: #f5edd6;
+    --coal:    #111110;
+
+    --f-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+    --f-mono: "SF Mono", "Fira Mono", monospace;
+  }
+
+  /* ═══ RESET ═══ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--f-sans);
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  /* ═══ LAYOUT ═══ */
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 640px) { .wrap { padding: 0 20px; } }
+
+  /* ═══ HEADER ═══ */
+  header {
+    position: sticky; top: 0; z-index: 40;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rail);
+  }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  @media (max-width: 640px) { .header-inner { padding: 14px 20px; } }
+  .logo {
+    font-weight: 600; font-size: 15px; letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .logo span { color: var(--gold); }
+  nav { display: flex; gap: 28px; align-items: center; }
+  @media (max-width: 768px) { nav { display: none; } }
+  nav a {
+    font-size: 13px; font-weight: 500; color: var(--mute);
+    transition: color .2s;
+  }
+  nav a:hover { color: var(--ink); }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; letter-spacing: .01em;
+    border-radius: 4px; cursor: pointer; transition: all .2s;
+    border: none; text-decoration: none;
+  }
+  .btn-primary {
+    background: var(--ink); color: var(--paper);
+    padding: 9px 18px;
+  }
+  .btn-primary:hover { background: #333; }
+  .btn-ghost {
+    background: transparent; color: var(--ink);
+    padding: 9px 18px; border: 1px solid var(--rail);
+  }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .btn-gold {
+    background: var(--gold); color: #fff;
+    padding: 11px 24px; font-size: 14px;
+  }
+  .btn-gold:hover { background: #9a7219; }
+
+  /* ═══ HERO ═══ */
+  .hero {
+    padding: 80px 0 72px;
+    border-bottom: 1px solid var(--rail);
+  }
+  .hero-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 32px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+  }
+  @media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+  }
+  @media (max-width: 640px) { .hero-inner { padding: 0 20px; } }
+
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px; font-weight: 500;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .display-1 {
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 300; line-height: 1.1;
+    letter-spacing: -.025em; color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .display-1 em {
+    font-style: normal; font-weight: 600;
+    color: var(--ink);
+  }
+  .hero-body {
+    font-size: 17px; line-height: 1.65; color: var(--mute);
+    max-width: 440px; margin-bottom: 36px;
+  }
+  .hero-body strong { color: var(--ink); font-weight: 600; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* hero right — photo placeholder + stat chips */
+  .hero-visual {
+    position: relative;
+  }
+  .photo-frame {
+    width: 100%; aspect-ratio: 4/5;
+    background: #e8e2d9;
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+  .photo-caption {
+    font-family: var(--f-mono);
+    font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--faint);
+    position: absolute; bottom: 16px; left: 16px;
+  }
+  /* photo placeholder grid lines */
+  .photo-frame::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--rail) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rail) 1px, transparent 1px);
+    background-size: 80px 80px;
+    opacity: .4;
+  }
+  .photo-frame-label {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    text-align: center;
+  }
+  .photo-frame-label p {
+    font-family: var(--f-mono); font-size: 11px; color: var(--faint);
+    letter-spacing: .06em; text-transform: uppercase;
+    line-height: 1.8;
+  }
+
+  /* stat chips — positioned around the photo */
+  .stat-chip {
+    position: absolute;
+    background: var(--surface); border: 1px solid var(--rail);
+    border-radius: 3px; padding: 10px 14px;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  }
+  .stat-chip .n {
+    font-size: 22px; font-weight: 600; color: var(--ink);
+    letter-spacing: -.02em; line-height: 1;
+  }
+  .stat-chip .n span { color: var(--gold); }
+  .stat-chip .l {
+    font-family: var(--f-mono); font-size: 9px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--faint); margin-top: 3px;
+  }
+  .chip-a { top: 24px; right: -20px; }
+  .chip-b { bottom: 48px; left: -20px; }
+  @media (max-width: 900px) {
+    .chip-a { right: 16px; }
+    .chip-b { left: 16px; }
+  }
+
+  /* ═══ PROOF BAR ═══ */
+  .proof {
+    border-bottom: 1px solid var(--rail);
+    background: var(--surface);
+  }
+  .proof-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 32px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+  }
+  @media (max-width: 640px) {
+    .proof-inner { grid-template-columns: 1fr; padding: 0 20px; }
+  }
+  .proof-item {
+    padding: 28px 0; text-align: center;
+    border-right: 1px solid var(--rail);
+  }
+  .proof-item:last-child { border-right: none; }
+  @media (max-width: 640px) {
+    .proof-item { border-right: none; border-bottom: 1px solid var(--rail); }
+    .proof-item:last-child { border-bottom: none; }
+  }
+  .proof-num {
+    font-size: 36px; font-weight: 300; letter-spacing: -.04em;
+    color: var(--ink); line-height: 1;
+  }
+  .proof-num sup { font-size: 18px; color: var(--gold); }
+  .proof-num sub { font-size: 14px; color: var(--gold); letter-spacing: 0; }
+  .proof-label {
+    font-size: 12px; color: var(--mute); margin-top: 6px; line-height: 1.4;
+  }
+
+  /* ═══ SECTIONS ═══ */
+  section { border-bottom: 1px solid var(--rail); }
+
+  /* section two col */
+  .two-col {
+    display: grid; grid-template-columns: 5fr 7fr; gap: 80px; align-items: center;
+  }
+  @media (max-width: 900px) {
+    .two-col { grid-template-columns: 1fr; gap: 40px; }
+  }
+  .two-col-flip { direction: rtl; }
+  .two-col-flip > * { direction: ltr; }
+
+  .display-2 {
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 300; line-height: 1.15; letter-spacing: -.025em;
+    color: var(--ink); margin-bottom: 20px;
+  }
+  .display-2 em { font-style: normal; font-weight: 600; }
+
+  .body-copy {
+    font-size: 15px; line-height: 1.7; color: var(--mute);
+  }
+  .body-copy + .body-copy { margin-top: 14px; }
+  .body-copy strong { color: var(--ink); font-weight: 600; }
+
+  /* ═══ NOT A REPLACEMENT ═══ */
+  .platform-section { padding: 80px 0; }
+  .logo-wall {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px 32px;
+    align-items: center;
+  }
+  @media (max-width: 640px) { .logo-wall { grid-template-columns: repeat(2, 1fr); } }
+  .logo-pill {
+    background: var(--surface); border: 1px solid var(--rail);
+    border-radius: 3px; padding: 14px 20px;
+    font-size: 13px; font-weight: 600; color: var(--mute);
+    text-align: center; letter-spacing: -.01em;
+  }
+
+  /* ═══ PRODUCT — BENTO ═══ */
+  .product-section { padding: 80px 0; }
+  .section-label {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint); margin-bottom: 16px;
+  }
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: auto;
+    gap: 12px; margin-top: 48px;
+  }
+  .bento-card {
+    background: var(--surface); border: 1px solid var(--rail);
+    border-radius: 3px; padding: 28px;
+    overflow: hidden;
+  }
+  .bento-card h3 {
+    font-size: 16px; font-weight: 600; margin-bottom: 8px;
+  }
+  .bento-card p {
+    font-size: 13px; line-height: 1.65; color: var(--mute);
+  }
+  .bc-a { grid-column: span 7; }
+  .bc-b { grid-column: span 5; }
+  .bc-c { grid-column: span 5; }
+  .bc-d { grid-column: span 7; }
+  @media (max-width: 900px) {
+    .bc-a, .bc-b, .bc-c, .bc-d { grid-column: span 12; }
+  }
+
+  /* flow viz inside bc-a */
+  .flow-demo {
+    margin-top: 24px;
+    background: var(--paper); border: 1px solid var(--rail);
+    border-radius: 3px; padding: 20px;
+  }
+  .flow-row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; padding: 8px 0;
+    border-bottom: 1px solid var(--rail);
+  }
+  .flow-row:last-child { border-bottom: none; }
+  .flow-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--rail); flex-shrink: 0;
+  }
+  .flow-dot.active { background: var(--gold); }
+  .flow-label { color: var(--mute); flex: 1; }
+  .flow-val {
+    font-family: var(--f-mono); font-size: 11px;
+    color: var(--faint); letter-spacing: .04em;
+  }
+
+  /* giving options in bc-d */
+  .giving-options {
+    margin-top: 20px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .give-opt {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--paper); border: 1px solid var(--rail);
+    border-radius: 3px; padding: 12px 16px;
+    font-size: 13px; color: var(--mute);
+  }
+  .give-opt.featured {
+    background: var(--gold-bg); border-color: var(--gold);
+    color: var(--ink); font-weight: 600;
+  }
+  .give-opt-badge {
+    font-family: var(--f-mono); font-size: 9px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gold);
+    background: var(--surface); border: 1px solid var(--gold);
+    border-radius: 2px; padding: 2px 6px;
+  }
+
+  /* stat large in bc-b */
+  .stat-large {
+    font-size: 64px; font-weight: 300; letter-spacing: -.05em;
+    line-height: 1; color: var(--gold); margin-top: 24px;
+  }
+  .stat-large-unit {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--faint); margin-top: 8px;
+  }
+
+  /* ═══ EVERY SEASON ═══ */
+  .season-section { padding: 80px 0; }
+
+  .chips {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+    margin-top: 32px;
+  }
+  .chip-dead {
+    font-size: 20px; font-weight: 600; padding: 8px 16px;
+    border: 1px solid var(--rail); border-radius: 3px;
+    color: var(--faint); text-decoration: line-through;
+    text-decoration-color: var(--rail);
+  }
+  .chip-live {
+    font-size: 20px; font-weight: 600; padding: 8px 16px;
+    border: 1px solid var(--gold); border-radius: 3px;
+    background: var(--gold-bg); color: var(--gold);
+  }
+  .chip-arrow { color: var(--faint); font-size: 20px; }
+
+  /* ═══ SCRIPTURE ═══ */
+  .scripture-section { padding: 80px 0; background: var(--surface); }
+  .verse-eyebrow {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 24px;
+  }
+  .verse {
+    font-size: clamp(20px, 2.5vw, 30px);
+    font-style: italic; line-height: 1.5;
+    color: var(--ink); font-weight: 300;
+    letter-spacing: -.01em;
+    border-left: 2px solid var(--gold);
+    padding-left: 24px;
+    margin-bottom: 28px;
+  }
+
+  /* scripture photo */
+  .scripture-photo {
+    width: 100%; aspect-ratio: 4/5;
+    background: #e0dbd3; border-radius: 2px;
+    position: relative; overflow: hidden;
+  }
+  .scripture-photo::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, transparent 40%, rgba(26,26,26,.15));
+  }
+  .scripture-photo-inner {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+  }
+  .scripture-photo-inner p {
+    font-family: var(--f-mono); font-size: 10px;
+    letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
+    line-height: 1.8;
+  }
+
+  /* ═══ HOW IT WORKS ═══ */
+  .how-section { padding: 80px 0; }
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0; margin-top: 48px;
+    border: 1px solid var(--rail); border-radius: 3px; overflow: hidden;
+  }
+  @media (max-width: 768px) {
+    .steps { grid-template-columns: 1fr; }
+  }
+  .step {
+    padding: 32px 28px;
+    border-right: 1px solid var(--rail);
+  }
+  .step:last-child { border-right: none; }
+  @media (max-width: 768px) {
+    .step { border-right: none; border-bottom: 1px solid var(--rail); }
+    .step:last-child { border-bottom: none; }
+  }
+  .step-num {
+    font-family: var(--f-mono); font-size: 11px; font-weight: 500;
+    letter-spacing: .1em; color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .step h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+  .step p { font-size: 13px; line-height: 1.65; color: var(--mute); }
+
+  /* audience tabs */
+  .audience-row {
+    display: flex; gap: 0; margin-top: 0;
+    border-bottom: 1px solid var(--rail);
+  }
+  .aud-tab {
+    font-size: 12px; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; padding: 12px 20px;
+    color: var(--faint); cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
+  }
+  .aud-tab.active {
+    color: var(--ink);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ═══ PRICING ═══ */
+  .pricing-section { padding: 80px 0; }
+  .pricing-card {
+    border: 1px solid var(--rail); border-radius: 3px;
+    overflow: hidden;
+  }
+  .pricing-inner {
+    display: grid; grid-template-columns: 5fr 7fr; align-items: center;
+  }
+  @media (max-width: 768px) {
+    .pricing-inner { grid-template-columns: 1fr; }
+  }
+  .pricing-text { padding: 48px; border-right: 1px solid var(--rail); }
+  @media (max-width: 768px) {
+    .pricing-text { border-right: none; border-bottom: 1px solid var(--rail); padding: 32px; }
+  }
+  .pricing-number { padding: 48px; text-align: center; background: var(--surface); }
+  @media (max-width: 768px) { .pricing-number { padding: 32px; } }
+  .price-giant {
+    font-size: clamp(72px, 10vw, 120px);
+    font-weight: 300; letter-spacing: -.06em; line-height: 1;
+    color: var(--ink);
+  }
+  .price-giant sup { font-size: .45em; color: var(--gold); vertical-align: super; }
+  .price-sub {
+    font-family: var(--f-mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--faint); margin-top: 8px;
+  }
+
+  .trust-row {
+    display: flex; flex-wrap: wrap; gap: 24px;
+    padding: 20px 32px; border-top: 1px solid var(--rail);
+    background: var(--paper);
+  }
+  @media (max-width: 640px) { .trust-row { padding: 20px; } }
+  .trust-item {
+    font-size: 12px; color: var(--mute);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .trust-dot {
+    width: 4px; height: 4px; border-radius: 50%; background: var(--gold);
+  }
+
+  /* ═══ WAITLIST ═══ */
+  .waitlist-section { padding: 80px 0; }
+  .waitlist-card {
+    border: 1px solid var(--rail); border-radius: 3px;
+    padding: 64px 48px; text-align: center;
+    background: var(--surface);
+    position: relative; overflow: hidden;
+  }
+  @media (max-width: 640px) { .waitlist-card { padding: 40px 24px; } }
+  /* subtle crosshair lines */
+  .waitlist-card::before {
+    content: '';
+    position: absolute; top: 50%; left: 0; right: 0; height: 1px;
+    background: var(--rail); opacity: .5;
+  }
+  .waitlist-card::after {
+    content: '';
+    position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+    background: var(--rail); opacity: .5;
+  }
+  .waitlist-inner { position: relative; z-index: 1; }
+  .waitlist-card .display-2 { margin-bottom: 16px; }
+  .waitlist-card .body-copy { max-width: 420px; margin: 0 auto 32px; }
+  .waitlist-form {
+    display: flex; gap: 10px; max-width: 400px; margin: 0 auto;
+  }
+  @media (max-width: 500px) { .waitlist-form { flex-direction: column; } }
+  .waitlist-form input {
+    flex: 1; padding: 11px 16px;
+    border: 1px solid var(--rail); border-radius: 4px;
+    background: var(--paper); color: var(--ink);
+    font-family: var(--f-sans); font-size: 14px;
+    outline: none; transition: border-color .2s;
+  }
+  .waitlist-form input:focus { border-color: var(--gold); }
+  .waitlist-form input::placeholder { color: var(--faint); }
+  .waitlist-note {
+    font-size: 12px; color: var(--faint); margin-top: 12px;
+  }
+
+  /* ═══ FOOTER ═══ */
+  footer {
+    background: var(--coal); color: #f2f1ee;
+    padding: 48px 0 32px;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  }
+  @media (max-width: 640px) { .footer-inner { padding: 0 20px; } }
+  .footer-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,.08);
+    margin-bottom: 28px;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .footer-logo { font-weight: 600; font-size: 15px; color: #f2f1ee; }
+  .footer-logo span { color: var(--gold); }
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a {
+    font-size: 12px; color: rgba(255,255,255,.45);
+    transition: color .2s;
+  }
+  .footer-links a:hover { color: #f2f1ee; }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-copy { font-size: 12px; color: rgba(255,255,255,.3); }
+  .footer-badge {
+    font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gold); opacity: .7;
+  }
+
+  /* ═══ UTILITIES ═══ */
+  .pt-80 { padding-top: 80px; }
+  .pb-80 { padding-bottom: 80px; }
+  .pt-16 { padding-top: 16px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-20 { margin-bottom: 20px; }
+  .mb-40 { margin-bottom: 40px; }
+  .mt-12 { margin-top: 12px; }
+  .mt-32 { margin-top: 32px; }
+
+  /* grid crosshair decorations */
+  .plus {
+    display: inline-block; width: 12px; height: 12px; position: relative;
+    color: var(--faint);
+  }
+  .plus::before {
+    content: '+'; position: absolute; top: -6px; left: -3px;
+    font-size: 14px; font-weight: 300; color: var(--rail);
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">Roster<span>.</span></a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#season">Why a percentage</a>
+      <a href="#pricing">Pricing</a>
+    </nav>
+    <a href="#waitlist" class="btn btn-primary">Join the waitlist</a>
+  </div>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="eyebrow">Paycheck giving for churches</p>
+      <h1 class="display-1">
+        Every way to give<br>is a fixed amount.<br><em>Except one.</em>
+      </h1>
+      <p class="hero-body">
+        Roster adds <strong>"Give from your paycheck"</strong> to your church's giving page.
+        Members choose a percentage of their income, set it once,
+        and give from the first of every paycheck.
+      </p>
+      <div class="hero-actions">
+        <a href="#waitlist" class="btn btn-gold">Join the waitlist</a>
+        <a href="#how" class="btn btn-ghost">See how it works</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="photo-frame">
+        <div class="photo-frame-label">
+          <p>Photo brief:<br>Congregation<br>interior, Sunday morning<br>warm light, rear shot</p>
+        </div>
+        <div class="photo-caption">Image #1 — Hero / congregation interior</div>
+      </div>
+      <div class="stat-chip chip-a">
+        <div class="n">95<span>%</span></div>
+        <div class="l">Paychecks covered</div>
+      </div>
+      <div class="stat-chip chip-b">
+        <div class="n"><span style="font-size:14px">flat</span> 2<span>%</span></div>
+        <div class="l">No monthly fees</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROOF BAR ═══ -->
+<div class="proof">
+  <div class="proof-inner">
+    <div class="proof-item">
+      <div class="proof-num">95<sup>%</sup></div>
+      <div class="proof-label">of America's paychecks covered</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-num">Once<sub>.</sub></div>
+      <div class="proof-label">set it — moves with their income</div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-num">2<sup>%</sup></div>
+      <div class="proof-label">flat · no monthly fees, no minimums</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NOT A REPLACEMENT ═══ -->
+<section class="platform-section">
+  <div class="wrap">
+    <div class="two-col">
+      <div>
+        <p class="section-label">Not a replacement</p>
+        <h2 class="display-2">A new giving channel —<br><em>not a replacement.</em></h2>
+        <p class="body-copy">
+          Roster works alongside the giving platform your church already uses.
+        </p>
+        <p class="body-copy mt-12">
+          <strong>You add one button to your giving page. Nothing else changes.</strong>
+        </p>
+      </div>
+      <div>
+        <div class="logo-wall">
+          <div class="logo-pill">Pushpay</div>
+          <div class="logo-pill">Tithe.ly</div>
+          <div class="logo-pill">Planning Center</div>
+          <div class="logo-pill">SecureGive</div>
+          <div class="logo-pill">Donorbox</div>
+          <div class="logo-pill">OnlineGiving</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRODUCT — BENTO ═══ -->
+<section class="product-section">
+  <div class="wrap">
+    <p class="section-label">The solution</p>
+    <h2 class="display-2">Roster built the <em>paycheck gateway.</em></h2>
+
+    <div class="bento">
+      <!-- A — flow card -->
+      <div class="bento-card bc-a">
+        <h3>One signup. Every payday.</h3>
+        <p>Two quick steps: choose a percentage, connect payroll. Done. Every paycheck after that, the gift moves automatically.</p>
+        <div class="flow-demo">
+          <div class="flow-row">
+            <div class="flow-dot active"></div>
+            <span class="flow-label">Choose your percentage</span>
+            <span class="flow-val">10%</span>
+          </div>
+          <div class="flow-row">
+            <div class="flow-dot active"></div>
+            <span class="flow-label">Confirm with your phone</span>
+            <span class="flow-val">6-digit code</span>
+          </div>
+          <div class="flow-row">
+            <div class="flow-dot active"></div>
+            <span class="flow-label">Payroll connected</span>
+            <span class="flow-val">Automatic</span>
+          </div>
+          <div class="flow-row">
+            <div class="flow-dot active"></div>
+            <span class="flow-label">First gift arrives</span>
+            <span class="flow-val">Next payday</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- B — 5 min -->
+      <div class="bento-card bc-b">
+        <h3>Set up in minutes</h3>
+        <p>One snippet on the giving page your church already has. No migration, no staff retraining.</p>
+        <div class="stat-large">&lt;5<br><span style="font-size:32px">min</span></div>
+        <div class="stat-large-unit">From signup to live</div>
+      </div>
+
+      <!-- C — churn -->
+      <div class="bento-card bc-c">
+        <h3>Giving that doesn't lapse</h3>
+        <p>No card to expire. No app to delete. A gift tied to the paycheck itself keeps going, every payday.</p>
+        <div class="stat-large">3×</div>
+        <div class="stat-large-unit">Lower churn than card recurring</div>
+      </div>
+
+      <!-- D — giving options -->
+      <div class="bento-card bc-d">
+        <h3>One more option — exactly where the others are</h3>
+        <p>It docks into your existing giving page alongside ACH, card, and digital wallets.</p>
+        <div class="giving-options">
+          <div class="give-opt">ACH / Bank transfer</div>
+          <div class="give-opt">Credit or debit card</div>
+          <div class="give-opt">Digital wallet</div>
+          <div class="give-opt featured">
+            Give from your paycheck
+            <span class="give-opt-badge">New</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EVERY SEASON ═══ -->
+<section class="season-section" id="season">
+  <div class="wrap">
+    <div class="two-col">
+      <div>
+        <p class="section-label">Why a percentage</p>
+        <h2 class="display-2">A commitment they can keep in <em>every season.</em></h2>
+        <p class="body-copy">
+          A fixed amount is a guess: too heavy in a lean month, quietly left behind after a raise.
+          A percentage is never a guess. It stays in proportion to what actually came in.
+        </p>
+        <p class="body-copy mt-12">
+          <strong>When income rises, the gift rises. When a season is lean, the gift eases down on its own.</strong>
+          Nothing for anyone to edit.
+        </p>
+        <div class="chips">
+          <span class="chip-dead">$25</span>
+          <span class="chip-dead">$50</span>
+          <span class="chip-dead">$100</span>
+          <span class="chip-arrow">→</span>
+          <span class="chip-live">10%</span>
+        </div>
+      </div>
+      <div>
+        <div class="photo-frame" style="aspect-ratio: 3/2;">
+          <div class="photo-frame-label">
+            <p>Photo brief:<br>Congregation in season<br>people present, warm interior<br>candid, not posed</p>
+          </div>
+          <div class="photo-caption">Image #2 — Every season / congregation context</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SCRIPTURE ═══ -->
+<section class="scripture-section">
+  <div class="wrap">
+    <div class="two-col">
+      <div class="scripture-photo">
+        <div class="scripture-photo-inner">
+          <p>Photo brief:<br>Small group prayer circle<br>hands joined, heads bowed<br>diverse, soft interior light<br>slight blur / grain</p>
+        </div>
+        <div class="photo-caption" style="position:absolute; bottom:16px; left:16px; color: rgba(255,255,255,.5);">Image #3 — Prayer / congregation</div>
+      </div>
+      <div>
+        <p class="verse-eyebrow">Proverbs 3 : 9</p>
+        <blockquote class="verse">
+          "Honor the Lord with the firstfruits<br>of all your produce."
+        </blockquote>
+        <p class="body-copy">
+          A giving page has never been able to offer that: every option is a dollar amount.
+          Roster adds the one that's <strong>a percentage.</strong>
+        </p>
+        <p class="body-copy mt-12">
+          Connected to hundreds of payroll providers, processing pay for
+          <strong>95%+ of jobs in the country.</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="how-section" id="how">
+  <div class="wrap">
+    <p class="section-label">How it works</p>
+    <h2 class="display-2 mb-40">One setup. <em>Every paycheck.</em></h2>
+
+    <div class="audience-row">
+      <div class="aud-tab active">For your admin</div>
+      <div class="aud-tab">For members</div>
+      <div class="aud-tab">For Finance Committee</div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Create your Roster account</h3>
+        <p>rostergiving.com/churches, in under 5 minutes. Find your org and add the bank account for payouts.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Add the button to your giving page</h3>
+        <p>One snippet, copied and pasted. No migration and no staff retraining — we'll do it with you on a call if you'd like.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Announce to your congregation</h3>
+        <p>Use the ready-made communication kit — emails, bulletin text, social posts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PRICING ═══ -->
+<section class="pricing-section" id="pricing">
+  <div class="wrap">
+    <p class="section-label mb-20">Pricing</p>
+    <h2 class="display-2 mb-40">Free to try. <em>Simple to understand.</em></h2>
+
+    <div class="pricing-card">
+      <div class="pricing-inner">
+        <div class="pricing-text">
+          <p class="body-copy">
+            <strong>2% of giving volume, less than typical card processing.</strong>
+            No monthly fee, no setup cost, no minimums.
+          </p>
+          <p class="body-copy mt-12">
+            Your first month is free, with real giving and real data.
+            The fee comes out of each gift before it lands — you never write us a check.
+          </p>
+          <div style="margin-top: 28px;">
+            <a href="#waitlist" class="btn btn-gold">Join the waitlist</a>
+          </div>
+        </div>
+        <div class="pricing-number">
+          <div class="price-giant">2<sup>%</sup></div>
+          <div class="price-sub">flat · first month free</div>
+        </div>
+      </div>
+      <div class="trust-row">
+        <span class="trust-item"><span class="trust-dot"></span>FDIC-insured accounts</span>
+        <span class="trust-item"><span class="trust-dot"></span>Standard charitable-gift treatment under IRS rules</span>
+        <span class="trust-item"><span class="trust-dot"></span>SOC 2 Type II underway</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ WAITLIST ═══ -->
+<section class="waitlist-section" id="waitlist">
+  <div class="wrap">
+    <div class="waitlist-card">
+      <div class="waitlist-inner">
+        <p class="eyebrow">Early access</p>
+        <h2 class="display-2">Add paycheck giving<br>to your church.</h2>
+        <p class="body-copy">Join the churches already on the waitlist. Setup takes less than 5 minutes once you're in.</p>
+        <form class="waitlist-form" onsubmit="return false">
+          <input type="email" placeholder="your@church.org">
+          <button type="submit" class="btn btn-gold">Join waitlist</button>
+        </form>
+        <p class="waitlist-note">No credit card. No commitment. We'll reach out to schedule your onboarding call.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-logo">Roster<span>.</span></div>
+      <div class="footer-links">
+        <a href="#">How it works</a>
+        <a href="#">Pricing</a>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Vulnerability Disclosure</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Roster Giving Inc.</span>
+      <span class="footer-badge">R01 — Swiss Utility</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
